@@ -4,9 +4,9 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
-
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class AceToysSimulation extends Simulation {
 
@@ -26,7 +26,13 @@ public class AceToysSimulation extends Simulation {
             .exec(
                     http("AceToys Home")
                             .get("/")
-                             // Save CSRF token value in a var for later use
+                            .check(status().is(200))
+                            .check(status().not(404), status().not(405))
+                            // regex looks for an exact phrase & //d looks for a digit with 7 digits to follow
+                            // .check(regex("a substring that exists in the markup \\d{7}"))
+                            // Check the HTML markup to see if it contains the below title
+                            .check(substring("<title>Ace Toys Online Shop</title>"))
+                            // Save CSRF token value in a var for later use
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             )
             .pause(1)
