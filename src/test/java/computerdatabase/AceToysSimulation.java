@@ -1,78 +1,89 @@
 package computerdatabase;
 
-import java.util.*;
-
-import io.gatling.javaapi.core.*;
-import io.gatling.javaapi.http.*;
-import io.gatling.javaapi.jdbc.*;
-
+import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
+import io.gatling.javaapi.http.HttpProtocolBuilder;
+
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.*;
+import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class AceToysSimulation extends Simulation {
 
-    private HttpProtocolBuilder httpProtocol = http
-            .baseUrl("https://acetoys.uk")
-//    .inferHtmlResources(AllowList(), DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*", ".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*detectportal\\.firefox\\.com.*"))
-            .inferHtmlResources(AllowList(), DenyList(".*\\.(js|css|gif|jpeg|jpg|ico|woff|woff2|t|o|ttf|png)", ".*detectportal\\.firefox\\.com.*"))
-            .acceptEncodingHeader("gzip, deflate");
+    private final HttpProtocolBuilder httpProtocol =
+            http
+                    .baseUrl("https://acetoys.uk")
+                    .inferHtmlResources(
+                            AllowList(),
+                            DenyList(
+                                    ".*\\.(js|css|gif|jpeg|jpg|ico|woff|woff2|t|o|ttf|png)",
+                                    ".*detectportal\\.firefox\\.com.*")
+                    )
+                    .acceptEncodingHeader("gzip, deflate")
+                    .silentResources(); // reduce report noise from static assets
 
-    private String uri08 = "https://acetoys.uk";
-
-    private ScenarioBuilder scn = scenario("AceToysSimulation")
+    private final ScenarioBuilder scn = scenario("AceToysSimulation")
             .exec(
-                    http("AceToysSimulation_74:GET_https://acetoys.uk/")
-                            .get(uri08 + "/")
+                    http("AceToys Home")
+                            .get("/")
+                             // Save CSRF token value in a var for later use
+                            .check(css("#_csrf", "content").saveAs("csrfToken"))
             )
             .pause(1)
             .exec(
-                    http("AceToysSimulation_84:GET_https://acetoys.uk/category/all/")
-                            .get(uri08 + "/category/all/")
+                    http("Category All")
+                            .get("/category/all/")
             )
             .pause(1)
             .exec(
-                    http("AceToysSimulation_85:GET_https://acetoys.uk/cart/add/1")
-                            .get(uri08 + "/cart/add/1")
+                    http("Add Item 1")
+                            .get("/cart/add/1")
             )
             .pause(3)
             .exec(
-                    http("AceToysSimulation_86:GET_https://acetoys.uk/product/coloured-building-blocks")
-                            .get(uri08 + "/product/coloured-building-blocks")
+                    http("Product: coloured-building-blocks")
+                            .get("/product/coloured-building-blocks")
             )
             .pause(2)
             .exec(
-                    http("AceToysSimulation_87:GET_https://acetoys.uk/cart/add/5")
-                            .get(uri08 + "/cart/add/5")
+                    http("Add Item 5")
+                            .get("/cart/add/5")
             )
             .pause(1)
             .exec(
-                    http("AceToysSimulation_88:GET_https://acetoys.uk/cart/view")
-                            .get(uri08 + "/cart/view")
-                            .resources()
+                    http("View Cart")
+                            .get("/cart/view")
             )
             .pause(6)
             .exec(
-                    http("AceToysSimulation_90:POST_https://acetoys.uk/login")
-                            .post(uri08 + "/login")
-                            .formParam("_csrf", "e0ce2c20-ad0f-4778-a8d0-189a2d4e9b18")
+                    http("Login")
+                            .post("/login")
+                            .formParam("_csrf", "#{csrfToken}")
                             .formParam("username", "user1")
                             .formParam("password", "pass")
-                            .resources()
+                            // Re-save the CSRF token at this point as the value changes
+                            .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
+
+            )
+            .exec(
+                    // This is how we access the session API
+                    session -> {
+                        System.out.println("Session: " + session);
+                        System.out.println("csrfTokenLoggedIn value is: " + session.getString("csrfTokenLoggedIn"));
+                        return session;
+                    }
             )
             .pause(4)
             .exec(
-                    http("AceToysSimulation_94:GET_https://acetoys.uk/cart/checkout")
-                            .get(uri08 + "/cart/checkout")
+                    http("Checkout")
+                            .get("/cart/checkout")
             )
             .pause(3)
             .exec(
-                    http("AceToysSimulation_95:POST_https://acetoys.uk/logout")
-                            .post(uri08 + "/logout")
-                            .formParam("_csrf", "0cc2a74f-6fce-47f4-be65-9fb9dea62df2")
-            )
-            .exec();
+                    http("Logout")
+                            .post("/logout")
+                            .formParam("_csrf", "#{csrfTokenLoggedIn}")
+            );
 
     {
         setUp(scn.injectOpen(atOnceUsers(1))).protocols(httpProtocol);
