@@ -26,12 +26,13 @@ public class AceToysSimulation extends Simulation {
             .exec(
                     http("AceToys Home")
                             .get("/")
-                            .check(status().is(200))
+                            // .check(status().is(200)) // 200 is checked by Gatling implicitly, no need to write it
                             .check(status().not(404), status().not(405))
                             // regex looks for an exact phrase & //d looks for a digit with 7 digits to follow
                             // .check(regex("a substring that exists in the markup \\d{7}"))
                             // Check the HTML markup to see if it contains the below title
                             .check(substring("<title>Ace Toys Online Shop</title>"))
+                            // Check the HTML markup for an element with an id of _csrf, and extract the value from content
                             // Save CSRF token value in a var for later use
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             )
