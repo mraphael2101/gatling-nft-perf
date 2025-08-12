@@ -36,12 +36,12 @@ public class AceToysSimulation extends Simulation {
                             // Save CSRF token value in a var for later use
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             )
-            .pause(1)
+            .pause(2)
             .exec(
                     http("Category All")
                             .get("/category/all/")
             )
-            .pause(1)
+            .pause(2)
             .exec(
                     http("Add Item 1")
                             .get("/cart/add/1")
@@ -56,12 +56,12 @@ public class AceToysSimulation extends Simulation {
                     http("Add Item 5")
                             .get("/cart/add/5")
             )
-            .pause(1)
+            .pause(2)
             .exec(
                     http("View Cart")
                             .get("/cart/view")
             )
-            .pause(6)
+            .pause(3)
             .exec(
                     http("Login")
                             .post("/login")
@@ -80,12 +80,12 @@ public class AceToysSimulation extends Simulation {
                         return session;
                     }
             )
-            .pause(4)
+            .pause(3)
             .exec(
                     http("Checkout")
                             .get("/cart/checkout")
             )
-            .pause(3)
+            .pause(2)
             .exec(
                     http("Logout")
                             .post("/logout")
