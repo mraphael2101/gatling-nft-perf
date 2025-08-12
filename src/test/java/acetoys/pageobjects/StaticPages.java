@@ -39,4 +39,10 @@ public class StaticPages {
                             .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
             );
 
+    public static ChainBuilder logoutPage =
+            exec(
+                    http("Logout")
+                            .post("/logout")
+                            .formParam("_csrf", "#{csrfTokenLoggedIn}")
+            );
 }
