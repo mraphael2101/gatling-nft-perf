@@ -1,9 +1,6 @@
 package acetoys;
 
-import acetoys.pageobjects.ShoppingCartPage;
-import acetoys.pageobjects.ProductCategoriesPage;
-import acetoys.pageobjects.ProductDetailsPage;
-import acetoys.pageobjects.StaticPages;
+import acetoys.pageobjects.*;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -38,11 +35,9 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(ProductCategoriesPage.viewCart)
             .pause(3)
-
             .exec(ShoppingCartPage.increaseQuantityInCart)
             .pause(2)
-
-            .exec(StaticPages.loginPage) // References to a static page object
+            .exec(Customer.login) // References to a static page object
             .exec(
                     // This is how we access the session API
                     session -> {
@@ -54,7 +49,7 @@ public class AceToysSimulation extends Simulation {
             .pause(3)
             .exec(ShoppingCartPage.checkoutCart)
             .pause(2)
-            .exec(StaticPages.logoutPage);
+            .exec(Customer.logout);
 
     {
         setUp(scn.injectOpen(atOnceUsers(1))).protocols(httpProtocol);

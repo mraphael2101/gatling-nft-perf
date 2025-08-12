@@ -12,7 +12,7 @@ public class StaticPages {
      * part of a Gatling scenario. This is particularly useful for structuring and reusing common sequences of
      * HTTP calls or actions across multiple scenarios, improving both readability and maintainability of the
      * performance test script
-    */
+     */
     public static ChainBuilder homePage =
             exec(
                     http("Load AceToys Home Page")
@@ -28,21 +28,4 @@ public class StaticPages {
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             );
 
-    public static ChainBuilder loginPage =
-            exec(
-                    http("Login")
-                            .post("/login")
-                            .formParam("_csrf", "#{csrfToken}")
-                            .formParam("username", "user1")
-                            .formParam("password", "pass")
-                            // Re-save the CSRF token at this point as the value changes
-                            .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
-            );
-
-    public static ChainBuilder logoutPage =
-            exec(
-                    http("Logout")
-                            .post("/logout")
-                            .formParam("_csrf", "#{csrfTokenLoggedIn}")
-            );
 }
