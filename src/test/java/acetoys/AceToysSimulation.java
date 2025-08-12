@@ -1,6 +1,6 @@
 package acetoys;
 
-import acetoys.pageobjects.CartCheckoutPage;
+import acetoys.pageobjects.ShoppingCartPage;
 import acetoys.pageobjects.ProductCategoriesPage;
 import acetoys.pageobjects.ProductDetailsPage;
 import acetoys.pageobjects.StaticPages;
@@ -38,6 +38,10 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(ProductCategoriesPage.viewCart)
             .pause(3)
+
+            .exec(ShoppingCartPage.increaseQuantityInCart)
+            .pause(2)
+
             .exec(StaticPages.loginPage) // References to a static page object
             .exec(
                     // This is how we access the session API
@@ -48,7 +52,7 @@ public class AceToysSimulation extends Simulation {
                     }
             )
             .pause(3)
-            .exec(CartCheckoutPage.checkoutCart)
+            .exec(ShoppingCartPage.checkoutCart)
             .pause(2)
             .exec(StaticPages.logoutPage);
 
