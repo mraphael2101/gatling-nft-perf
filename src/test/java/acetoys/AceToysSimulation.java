@@ -1,5 +1,6 @@
-package computerdatabase;
+package acetoys;
 
+import acetoys.pageobjects.StaticPages;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -23,19 +24,7 @@ public class AceToysSimulation extends Simulation {
                     .silentResources(); // reduce report noise from static assets
 
     private final ScenarioBuilder scn = scenario("AceToysSimulation")
-            .exec(
-                    http("AceToys Home")
-                            .get("/")
-                            // .check(status().is(200)) // 200 is checked by Gatling implicitly, no need to write it
-                            .check(status().not(404), status().not(405))
-                            // regex looks for an exact phrase & //d looks for a digit with 7 digits to follow
-                            // .check(regex("a substring that exists in the markup \\d{7}"))
-                            // Check the HTML markup to see if it contains the below title
-                            .check(substring("<title>Ace Toys Online Shop</title>"))
-                            // Check the HTML markup for an element with an id of _csrf, and extract the value from content
-                            // Save CSRF token value in a var for later use
-                            .check(css("#_csrf", "content").saveAs("csrfToken"))
-            )
+            .exec(StaticPages.homePage) // References to a static page object
             .pause(2)
             .exec(
                     http("Category All")
@@ -62,16 +51,7 @@ public class AceToysSimulation extends Simulation {
                             .get("/cart/view")
             )
             .pause(3)
-            .exec(
-                    http("Login")
-                            .post("/login")
-                            .formParam("_csrf", "#{csrfToken}")
-                            .formParam("username", "user1")
-                            .formParam("password", "pass")
-                            // Re-save the CSRF token at this point as the value changes
-                            .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
-
-            )
+            .exec(StaticPages.loginPage) // References to a static page object
             .exec(
                     // This is how we access the session API
                     session -> {
