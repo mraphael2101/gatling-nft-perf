@@ -2,6 +2,7 @@ package acetoys;
 
 import acetoys.pageobjects.CartCheckoutPage;
 import acetoys.pageobjects.ProductCategoriesPage;
+import acetoys.pageobjects.ProductDetailsPage;
 import acetoys.pageobjects.StaticPages;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
@@ -31,7 +32,7 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(ProductCategoriesPage.addItem1ToCart)
             .pause(3)
-            .exec(ProductCategoriesPage.addColouredBuildingBlocksToCart)
+            .exec(ProductDetailsPage.loadProductDetailsPage_ColouredBuildingBlocks)
             .pause(2)
             .exec(ProductCategoriesPage.addItem5ToCart)
             .pause(2)

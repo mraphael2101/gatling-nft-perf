@@ -28,12 +28,6 @@ public class ProductCategoriesPage {
                             // .check(css(".page-item.active").is("2"))
             );
 
-    public static ChainBuilder addColouredBuildingBlocksToCart =
-            exec(
-                    http("Product: coloured-building-blocks")
-                            .get("/product/coloured-building-blocks")
-            );
-
     public static ChainBuilder viewCart =
             exec(
                     http("View Cart")
