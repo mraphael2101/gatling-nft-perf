@@ -21,7 +21,9 @@ public class Customer {
                             .formParam("password", "#{password}")
                             // Re-save the CSRF token at this point as the value changes
                             .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
-            );
+            )
+                    // Line updates the Gatling Session for the current virtual user to record that they are now authenticated
+                    .exec(session -> session.set("customerLoggedIn", true));
 
     public static ChainBuilder logout =
             // 10% chance to log out

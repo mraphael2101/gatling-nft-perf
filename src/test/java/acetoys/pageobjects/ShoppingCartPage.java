@@ -2,10 +2,20 @@ package acetoys.pageobjects;
 
 import io.gatling.javaapi.core.ChainBuilder;
 
-import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class ShoppingCartPage {
+
+    public static ChainBuilder viewCart =
+            // Conditional logic, if the user is not logged in, log in first
+            doIf(session -> !session.getBoolean("customerLoggedIn"))
+                    .then(exec(Customer.login))
+                    .exec(
+                            http("View Cart")
+                                    .get("/cart/view")
+                                    .check(css("#CategoryHeader").is("Cart Overview"))
+                    );
 
     public static ChainBuilder checkoutCart =
             exec(

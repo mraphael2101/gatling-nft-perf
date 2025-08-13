@@ -1,6 +1,7 @@
 package acetoys;
 
 import acetoys.pageobjects.*;
+import acetoys.session.UserSession;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -23,6 +24,7 @@ public class AceToysSimulation extends Simulation {
                     .silentResources(); // reduce report noise from static assets
 
     private final ScenarioBuilder scn = scenario("AceToysSimulation")
+            .exec(UserSession.initSession)
             // Feed credentials so ${username} and ${password} exist in the session
             .feed(csv("data/user_credentials.csv").circular())
             .exec(StaticPages.homePage) // References to a static page object
@@ -35,11 +37,12 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(ProductCategoriesPage.addItem5ToCart)
             .pause(2)
+            .exec(ShoppingCartPage.viewCart)
+            .pause(2)
             .exec(ProductCategoriesPage.viewCart)
             .pause(3)
             .exec(ShoppingCartPage.increaseQuantityInCart)
             .pause(2)
-            .exec(Customer.login) // References to a static page object
             .exec(
                     // This is how we access the session API
                     session -> {
