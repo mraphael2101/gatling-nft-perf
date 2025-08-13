@@ -31,7 +31,7 @@ public class ProductDetailsPage {
                                     .get("/product/#{slug}")
                                     .check(
                                             css("#ProductDescription")
-                                                    /* isEL method is used to check the value of the dynamic description
+                                                    /* isEL method checks the value of the dynamic description
                                                     attribute from the feeder/json file */
                                                     .isEL("#{description}")
                                     )
