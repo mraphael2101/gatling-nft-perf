@@ -2,18 +2,23 @@ package acetoys.pageobjects;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.Choice;
+import io.gatling.javaapi.core.FeederBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class Customer {
+
+    private static final FeederBuilder<String> userCredentialsFeeder =
+            csv("data/user_credentials.csv").circular();
+
     public static ChainBuilder login =
             exec(
                     http("Login")
                             .post("/login")
                             .formParam("_csrf", "#{csrfToken}")
-                            .formParam("username", "user1")
-                            .formParam("password", "pass")
+                            .formParam("username", "#{username}")
+                            .formParam("password", "#{password}")
                             // Re-save the CSRF token at this point as the value changes
                             .check(css("#_csrf", "content").saveAs("csrfTokenLoggedIn"))
             );
