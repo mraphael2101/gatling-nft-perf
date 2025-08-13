@@ -23,6 +23,8 @@ public class AceToysSimulation extends Simulation {
                     .silentResources(); // reduce report noise from static assets
 
     private final ScenarioBuilder scn = scenario("AceToysSimulation")
+            // Feed credentials so ${username} and ${password} exist in the session
+            .feed(csv("data/user_credentials.csv").circular())
             .exec(StaticPages.homePage) // References to a static page object
             .pause(2)
             .exec(ProductCategoriesPage.browseProductListByCategory)
