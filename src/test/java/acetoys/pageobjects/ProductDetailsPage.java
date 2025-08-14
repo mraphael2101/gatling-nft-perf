@@ -5,6 +5,7 @@ import io.gatling.javaapi.core.FeederBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
+import static io.gatling.javaapi.http.HttpDsl.status;
 
 public class ProductDetailsPage {
 
@@ -37,4 +38,12 @@ public class ProductDetailsPage {
                                     )
                                     .check(substring("You have <span>1</span> products in your Basket"))
                     );
+
+    public static ChainBuilder addCurrentProductToCart =
+            exec(
+                    http("Add Current Product To Cart")
+                            .get("/cart/add/#{id}")
+                            .check(status().not(404), status().not(405))
+            );
+
 }
