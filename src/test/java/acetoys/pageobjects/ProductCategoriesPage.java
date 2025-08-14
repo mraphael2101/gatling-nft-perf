@@ -16,16 +16,18 @@ public class ProductCategoriesPage {
 
     // Pragmatic HTML pagination: hit the known URL pattern and iterate a bounded number of times.
     public static ChainBuilder browseProductListByCategoryAcrossPages =
-            repeat("#{maxPages}", "i").on(
-                    exec(
-                            http("Category All page #{productListPageNumber}")
-                                    .get("/category/all?page=#{productListPageNumber}")
-                            // Optionally assert a very stable marker if available, otherwise omit checks.
-                            // .check(substring("<title>").exists())
-                    )
-                            .exec(s -> s.set("productListPageNumber", s.getInt("productListPageNumber") + 1))
-                            .pause(2)
-            );
+            exec(s -> s.set("productListPageNumber", 1)) // Reset page number each time this chain is invoked
+
+                    .repeat("#{maxPages}", "i").on(
+                            exec(
+                                    http("Category All page #{productListPageNumber}")
+                                            .get("/category/all?page=#{productListPageNumber}")
+                                    // Optionally assert a very stable marker if available, otherwise omit checks.
+                                    // .check(substring("<title>").exists())
+                            )
+                                    .exec(s -> s.set("productListPageNumber", s.getInt("productListPageNumber") + 1))
+                                    .pause(2)
+                    );
 
 
     public static ChainBuilder addItem1ToCart =

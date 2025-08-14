@@ -28,4 +28,19 @@ public class StaticPages {
                             .check(css("#_csrf", "content").saveAs("csrfToken"))
             );
 
+    public static ChainBuilder getInTouch =
+            exec(
+                    http("Get In Touch")
+                            .get("/get-in-touch")
+                            .check(status().not(404), status().not(405))
+                            .check(substring("<h1>Get in Touch</h1>"))
+            );
+
+    public static ChainBuilder ourStory =
+            exec(
+                    http("Our Story")
+                            .get("/our-story")
+                            .check(status().not(404), status().not(405))
+                            .check(substring("<h1>Our Story</h1>"))
+            );
 }
