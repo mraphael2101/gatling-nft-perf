@@ -30,11 +30,9 @@ public class AceToysSimulation extends Simulation {
             .feed(csv("data/user_credentials.csv").circular())
             .exec(StaticPages.homePage) // References to a static page object
             .pause(2)
-
             .exec(UserSession.increaseItemsInBasket)
             .exec(ProductCategoriesPage.browseProductListByCategoryAcrossPages)
             .pause(2)
-
             .exec(ProductCategoriesPage.addItem1ToCart)
             .pause(3)
             .exec(ProductDetailsPage.loadProductDetailsPage_ColouredBuildingBlocks)
@@ -57,7 +55,6 @@ public class AceToysSimulation extends Simulation {
             .exec(ShoppingCartPage.checkoutCart)
             .pause(2)
             .exec(Customer.logout);
-
     {
         setUp(scn.injectOpen(atOnceUsers(1))).protocols(httpProtocol);
     }
