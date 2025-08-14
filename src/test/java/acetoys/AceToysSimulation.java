@@ -25,12 +25,16 @@ public class AceToysSimulation extends Simulation {
 
     private final ScenarioBuilder scn = scenario("AceToysSimulation")
             .exec(UserSession.initSession)
+            .exec()
             // Feed credentials so ${username} and ${password} exist in the session
             .feed(csv("data/user_credentials.csv").circular())
             .exec(StaticPages.homePage) // References to a static page object
             .pause(2)
-            .exec(ProductCategoriesPage.browseProductListByCategory)
+
+            .exec(UserSession.increaseItemsInBasket)
+            .exec(ProductCategoriesPage.browseProductListByCategoryAcrossPages)
             .pause(2)
+
             .exec(ProductCategoriesPage.addItem1ToCart)
             .pause(3)
             .exec(ProductDetailsPage.loadProductDetailsPage_ColouredBuildingBlocks)
@@ -39,8 +43,6 @@ public class AceToysSimulation extends Simulation {
             .pause(2)
             .exec(ShoppingCartPage.viewCart)
             .pause(2)
-            .exec(ProductCategoriesPage.viewCart)
-            .pause(3)
             .exec(ShoppingCartPage.increaseQuantityInCart)
             .pause(2)
             .exec(

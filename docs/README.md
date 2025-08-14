@@ -26,3 +26,4 @@ B) You can search for a substring in your text when you don't know exactly where
 C) With stress testing, we are usually more focused on testing the performance of the backend service, rather than 
    whether we can just download lots of files. These elements are typically cached on a production service, and just
    downloading them many times isn't really testing the performance of the backend service.
+D) Gatling doesn’t execute JavaScript
