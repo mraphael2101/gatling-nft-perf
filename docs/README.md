@@ -27,3 +27,13 @@ C) With stress testing, we are usually more focused on testing the performance o
    whether we can just download lots of files. These elements are typically cached on a production service, and just
    downloading them many times isn't really testing the performance of the backend service.
 D) Gatling doesn’t execute JavaScript
+E) Fundamental classes: ChainBuilder, FeederBuilder<String>
+F) // 10% chance to log out
+   randomSwitch().on(
+   Choice.withWeight(10, exec(
+G) // Using repeat with a counter and group("Browse pass #{pass}") labels each iteration as a separate group in the report
+   .repeat(3, "pass").on(
+     group("Browse pass #{pass}").on(
+H) Gathering the volume metrics, and identifying the scenarios is an important aspect of any performance testing project
+J) UML sequence diagrams that show the flow of the test are valuable
+K) The volume of data in the database should be similar to production, if applicable 
