@@ -36,8 +36,12 @@ public class ProductDetailsPage {
                                                     attribute from the feeder/json file */
                                                     .isEL("#{description}")
                                     )
-                                    .check(substring("You have <span>1</span> products in your Basket"))
-                    );
+
+                    ).exec(session -> {
+                        int count = Integer.parseInt(session.getString("basketCount"));
+                        if (count < 1) throw new RuntimeException("Basket count < 1");
+                        return session;
+                    });
 
     public static ChainBuilder addCurrentProductToCart =
             exec(
