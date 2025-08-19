@@ -15,6 +15,7 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 public class AceToysSimulation extends Simulation {
 
     // These parameters can be accessed from CLI in Jenkins or from the IDE
+    // For the final Jenkins config, change from System.getProperty() to System.getenv()
     private static final String TEST_TYPE = System.getProperty("TEST_TYPE", "INSTANT_USERS");
     private static final String DOMAIN = "https://acetoys.uk";
 
@@ -66,7 +67,13 @@ public class AceToysSimulation extends Simulation {
         // Make execution mode for the framework dynamic like this to allow for easy switching between different test types
         switch (TEST_TYPE) {
             case "INSTANT_USERS":
-                setUp(TestPopulator.instantUsers).protocols(httpProtocolBuilder);
+                setUp(TestPopulator.instantUsers).protocols(httpProtocolBuilder)
+                // These assertions will show up in the pipeline
+                        .assertions(
+                                global().responseTime().mean().lt(3),
+                                global().successfulRequests().percent().gt(99.0),
+                                forAll().responseTime().max().lt(850)
+                        );
                 break;
             case "RAMP_USERS":
                 setUp(TestPopulator.rampUsers).protocols(httpProtocolBuilder);
