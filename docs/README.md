@@ -40,4 +40,4 @@ J) The volume of data in the database should be similar to production, if applic
 K) Test Population in Gatling represents the number of virtual users, and their injection profile
 L) Multiple Gatling simulations can be executed both sequentially and in parallel
 M) A closed workload model in Gatling is a method of testing an application can support a fixed number of users
-N) 
+N) A Gatling plugin exists for the Jenkins CI tool
