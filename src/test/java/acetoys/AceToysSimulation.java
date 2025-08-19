@@ -14,6 +14,7 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class AceToysSimulation extends Simulation {
 
+    // These parameters can be accessed from CLI in Jenkins or from the IDE
     private static final String TEST_TYPE = System.getProperty("TEST_TYPE", "INSTANT_USERS");
     private static final String DOMAIN = "https://acetoys.uk";
 

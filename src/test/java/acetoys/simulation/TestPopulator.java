@@ -19,6 +19,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 
 public class TestPopulator {
 
+    // These parameters can be accessed from CLI in Jenkins or from the IDE
     private static final int USER_COUNT = Integer.parseInt(System.getProperty("USERS", "5"));
     private static final Duration RAMP_DURATION = Duration.ofSeconds(Integer.parseInt(System.getProperty("RAMP_DURATION", "10")));
 
