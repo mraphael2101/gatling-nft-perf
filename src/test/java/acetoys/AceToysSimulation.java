@@ -14,10 +14,13 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class AceToysSimulation extends Simulation {
 
+    private static final String TEST_TYPE = System.getProperty("TEST_TYPE", "INSTANT_USERS");
+    private static final String DOMAIN = "https://acetoys.uk";
+
 // Run mode 1 - Uncomment this block to run the simulation
 //    private final HttpProtocolBuilder httpProtocol =
 //            http
-//                    .baseUrl("https://acetoys.uk")
+//                    .baseUrl(DOMAIN)
 //                    .inferHtmlResources(
 //                            AllowList(),
 //                            DenyList(
@@ -36,7 +39,7 @@ public class AceToysSimulation extends Simulation {
 //    }
 
     private HttpProtocolBuilder httpProtocolBuilder = http
-            .baseUrl("https://acetoys.uk")
+            .baseUrl(DOMAIN)
                     .inferHtmlResources(
                             AllowList(),
                             DenyList(
@@ -59,8 +62,22 @@ public class AceToysSimulation extends Simulation {
 //                        .injectOpen(atOnceUsers(10)).protocols(httpProtocolBuilder)
 //        );
 
-        setUp(
-                TestPopulator.complexInjection.protocols(httpProtocolBuilder)
-        );
+        // Make execution mode for the framework dynamic like this to allow for easy switching between different test types
+        switch (TEST_TYPE) {
+            case "INSTANT_USERS":
+                setUp(TestPopulator.instantUsers).protocols(httpProtocolBuilder);
+                break;
+            case "RAMP_USERS":
+                setUp(TestPopulator.rampUsers).protocols(httpProtocolBuilder);
+                break;
+            case "COMPLEX_INJECTION":
+                setUp(TestPopulator.complexInjection).protocols(httpProtocolBuilder);
+                break;
+            case "CLOSED_MODEL":
+                setUp(TestPopulator.closedModel).protocols(httpProtocolBuilder);
+                break;
+            default:
+                setUp(TestPopulator.instantUsers).protocols(httpProtocolBuilder);
+        }
     }
 }

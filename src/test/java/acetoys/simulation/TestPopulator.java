@@ -2,6 +2,8 @@ package acetoys.simulation;
 
 import io.gatling.javaapi.core.PopulationBuilder;
 
+import java.time.Duration;
+
 import static io.gatling.javaapi.core.CoreDsl.*;
 
 //TODO: See https://docs.gatling.io/concepts/injection/#open-model for more details
@@ -17,6 +19,9 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 
 public class TestPopulator {
 
+    private static final int USER_COUNT = Integer.parseInt(System.getProperty("USERS", "5"));
+    private static final Duration RAMP_DURATION = Duration.ofSeconds(Integer.parseInt(System.getProperty("RAMP_DURATION", "10")));
+
     /**
      * Open model: waits 5s, then injects 10 users immediately in a single burst.
      * Useful for quick smoke checks and validating scenario wiring under a short spike.
@@ -25,7 +30,7 @@ public class TestPopulator {
             TestScenario.defaultLoadTest
                     .injectOpen(
                             nothingFor(5),
-                            atOnceUsers(10)
+                            atOnceUsers(USER_COUNT)
                     );
 
     /**
@@ -36,7 +41,7 @@ public class TestPopulator {
             TestScenario.defaultLoadTest
                     .injectOpen(
                             nothingFor(5),
-                            rampUsers(10).during(20)
+                            rampUsers(USER_COUNT).during(RAMP_DURATION)
                     );
 
     /**
