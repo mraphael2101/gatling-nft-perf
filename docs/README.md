@@ -41,3 +41,6 @@ K) Test Population in Gatling represents the number of virtual users, and their 
 L) Multiple Gatling simulations can be executed both sequentially and in parallel
 M) A closed workload model in Gatling is a method of testing an application can support a fixed number of users
 N) A Gatling plugin exists for the Jenkins CI tool
+O) CLI parameters can be configured in Jenkins using either environment variables or passing runtime parameters
+   with the mvn command, e.g. -DUSERS=100
+P) Add assertions to see if any recent code changes have caused transaction response times to spike
