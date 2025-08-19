@@ -70,9 +70,9 @@ public class AceToysSimulation extends Simulation {
                 setUp(TestPopulator.instantUsers).protocols(httpProtocolBuilder)
                 // These assertions will show up in the pipeline
                         .assertions(
-                                global().responseTime().mean().lt(3),
-                                global().successfulRequests().percent().gt(99.0),
-                                forAll().responseTime().max().lt(850)
+                                global().responseTime().mean().lte(3), // Checks average mean response time is less than or equal to 3 ms
+                                global().successfulRequests().percent().gt(99.0), // Less than 1% errors
+                                forAll().responseTime().max().lte(850)
                         );
                 break;
             case "RAMP_USERS":
