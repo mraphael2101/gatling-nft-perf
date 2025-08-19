@@ -35,5 +35,9 @@ G) // Using repeat with a counter and group("Browse pass #{pass}") labels each i
    .repeat(3, "pass").on(
      group("Browse pass #{pass}").on(
 H) Gathering the volume metrics, and identifying the scenarios is an important aspect of any performance testing project
-J) UML sequence diagrams that show the flow of the test are valuable
-K) The volume of data in the database should be similar to production, if applicable 
+I) UML sequence diagrams that show the flow of the test are valuable
+J) The volume of data in the database should be similar to production, if applicable
+K) Test Population in Gatling represents the number of virtual users, and their injection profile
+L) Multiple Gatling simulations can be executed both sequentially and in parallel
+M) A closed workload model in Gatling is a method of testing an application can support a fixed number of users
+N) 
