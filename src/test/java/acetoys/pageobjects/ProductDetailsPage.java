@@ -38,8 +38,6 @@ public class ProductDetailsPage {
                                     )
 
                     ).exec(session -> {
-                        int count = Integer.parseInt(session.getString("basketCount"));
-                        if (count < 1) throw new RuntimeException("Basket count < 1");
                         return session;
                     });
 
